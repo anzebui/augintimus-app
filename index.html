@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFD3E6">
+  <title>Augintimus</title>
+  <link rel="icon" href="img/logo.png">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="stage">
+  <main class="device">
+
+    <!-- ============ 1. WELCOME / LOGIN ============ -->
+    <section id="screen-welcome" class="screen welcome" hidden>
+      <div class="welcome-top">
+        <img class="welcome-logo" src="img/logo.png" alt="">
+        <h1 class="wordmark">Augintimus</h1>
+        <p class="tagline">Susipažink su gyvūnu, kuris laukia būtent tavęs</p>
+      </div>
+
+      <!-- Decorative stack of cards (CSS only) -->
+      <div class="deck" aria-hidden="true">
+        <div class="deck-card deck-back">🐱</div>
+        <div class="deck-card deck-mid">🐕</div>
+        <div class="deck-card deck-front">
+          <span class="deck-emoji">🐶</span>
+          <span class="deck-name">Rudis, 3 m.</span>
+          <span class="deck-buttons">
+            <span class="dot dot-no">✕</span>
+            <span class="dot dot-yes">♥</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="welcome-actions">
+        <button id="btn-google" class="btn btn-white" type="button">
+          <svg class="g-icon" viewBox="0 0 48 48" width="22" height="22" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.5l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/>
+            <path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/>
+            <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/>
+          </svg>
+          Tęsti su Google
+        </button>
+
+        <button class="btn btn-ghost" type="button" disabled>
+          Prisijungti su Smart-ID <span class="chip">netrukus</span>
+        </button>
+
+        <p class="legal">Tęsdamas sutinki su naudojimo sąlygomis ir privatumo politika.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. GYVŪNAI (cards) ============ -->
+    <section id="screen-gyvunai" class="screen tab-screen" hidden>
+      <header class="topbar">
+        <img src="img/logo.png" alt="" width="34" height="34">
+        <span class="brand">Augintimus</span>
+      </header>
+      <div class="content">
+        <div class="empty">
+          <div class="empty-art" aria-hidden="true">🐾</div>
+          <h2>Kortelės jau netrukus</h2>
+          <p>Čia matysi gyvūnus, kurie ieško namų. Braukk į dešinę, jei patinka!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. SUTAPIMAI (matches) ============ -->
+    <section id="screen-sutapimai" class="screen tab-screen" hidden>
+      <header class="topbar">
+        <img src="img/logo.png" alt="" width="34" height="34">
+        <span class="brand">Sutapimai</span>
+      </header>
+      <div class="content">
+        <div class="empty">
+          <div class="empty-art" aria-hidden="true">💚</div>
+          <h2>Dar nėra sutapimų</h2>
+          <p>Kai prieglauda patvirtins tavo anketą, čia atsiras jos kontaktai.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. PROFILIS ============ -->
+    <section id="screen-profilis" class="screen tab-screen" hidden>
+      <header class="topbar">
+        <img src="img/logo.png" alt="" width="34" height="34">
+        <span class="brand">Profilis</span>
+      </header>
+      <div class="content">
+        <div class="profile-card">
+          <div class="avatar" aria-hidden="true">A</div>
+          <div>
+            <p class="profile-name">Demo vartotojas</p>
+            <p class="profile-mail">demo@augintimus.lt</p>
+          </div>
+        </div>
+
+        <ul class="rows">
+          <li class="row" aria-disabled="true"><span>Mano anketa</span><span class="chip">netrukus</span></li>
+          <li class="row" aria-disabled="true"><span>Pranešimai</span><span class="chip">netrukus</span></li>
+          <li class="row" aria-disabled="true"><span>Apie Augintimus</span><span class="chip">netrukus</span></li>
+        </ul>
+
+        <button id="btn-logout" class="btn btn-plum" type="button">Atsijungti</button>
+        <p class="demo-note">Demonstracinė versija. Duomenys išgalvoti.</p>
+      </div>
+    </section>
+
+    <!-- ============ BOTTOM TAB BAR ============ -->
+    <nav id="tabbar" class="tabbar" aria-label="Pagrindinė navigacija" hidden>
+      <a class="tab" href="#/gyvunai" data-tab="gyvunai">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 13.2c-2.6 0-5.2 2.4-5.2 4.8 0 1.6 1.2 2.6 2.7 2.6 1 0 1.7-.4 2.5-.4s1.5.4 2.5.4c1.5 0 2.7-1 2.7-2.6 0-2.4-2.6-4.8-5.2-4.8zM5.6 11.6c1.1 0 2-1.1 2-2.5S6.7 6.600 5.600 6.600 3.600 7.700 3.600 9.100s.9 2.500 2 2.500zm4.300-2.600c1.200 0 2.100-1.300 2.100-2.900S11.100 3.200 9.900 3.200 7.800 4.500 7.800 6.100s.9 2.900 2.100 2.900zm4.200 0c1.200 0 2.100-1.300 2.100-2.900s-.9-2.900-2.100-2.900-2.100 1.300-2.100 2.900.9 2.900 2.100 2.900zm4.300 2.600c1.100 0 2-1.100 2-2.500s-.9-2.500-2-2.500-2 1.100-2 2.500.9 2.500 2 2.500z"/></svg>
+        <span>Gyvūnai</span>
+      </a>
+      <a class="tab" href="#/sutapimai" data-tab="sutapimai">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span>Sutapimai</span>
+      </a>
+      <a class="tab" href="#/profilis" data-tab="profilis">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.700 2.400 12 2.400 7.200 4.500 7.200 7.200 9.300 12 12 12zm0 2.400c-3.200 0-9.600 1.600-9.600 4.800v2.400h19.200v-2.400c0-3.200-6.400-4.800-9.600-4.800z"/></svg>
+        <span>Profilis</span>
+      </a>
+    </nav>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
