@@ -54,7 +54,27 @@
       </div>
     </section>
 
-    <!-- ============ 2. GYVŪNAI (cards) ============ -->
+    <!-- ============ 2. ANKETA (onboarding wizard) ============
+         The questions themselves live in js/onboarding.js -->
+    <section id="screen-anketa" class="screen anketa" hidden>
+      <header class="wiz-top">
+        <button id="wiz-back" class="wiz-back" type="button" aria-label="Atgal">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="wiz-progress" class="progress" role="progressbar" aria-label="Anketos eiga" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1">
+          <div id="wiz-bar" class="progress-bar"></div>
+        </div>
+        <span id="wiz-count" class="wiz-count">1/6</span>
+      </header>
+
+      <div id="wiz-body" class="wiz-body"></div>
+
+      <footer class="wiz-foot">
+        <button id="wiz-next" class="btn btn-tangerine" type="button">Toliau</button>
+      </footer>
+    </section>
+
+    <!-- ============ 3. GYVŪNAI (cards) ============ -->
     <section id="screen-gyvunai" class="screen tab-screen" hidden>
       <header class="topbar">
         <img src="img/logo.png" alt="" width="34" height="34">
@@ -64,12 +84,12 @@
         <div class="empty">
           <div class="empty-art" aria-hidden="true">🐾</div>
           <h2>Kortelės jau netrukus</h2>
-          <p>Čia matysi gyvūnus, kurie ieško namų. Braukk į dešinę, jei patinka!</p>
+          <p>Čia matysi gyvūnus, kurie ieško namų. Brauk į dešinę, jei patinka!</p>
         </div>
       </div>
     </section>
 
-    <!-- ============ 3. SUTAPIMAI (matches) ============ -->
+    <!-- ============ 4. SUTAPIMAI (matches) ============ -->
     <section id="screen-sutapimai" class="screen tab-screen" hidden>
       <header class="topbar">
         <img src="img/logo.png" alt="" width="34" height="34">
@@ -84,7 +104,7 @@
       </div>
     </section>
 
-    <!-- ============ 4. PROFILIS ============ -->
+    <!-- ============ 5. PROFILIS ============ -->
     <section id="screen-profilis" class="screen tab-screen" hidden>
       <header class="topbar">
         <img src="img/logo.png" alt="" width="34" height="34">
@@ -92,20 +112,23 @@
       </header>
       <div class="content">
         <div class="profile-card">
-          <div class="avatar" aria-hidden="true">A</div>
+          <div id="profile-avatar" class="avatar" aria-hidden="true">V</div>
           <div>
-            <p class="profile-name">Demo vartotojas</p>
-            <p class="profile-mail">demo@augintimus.lt</p>
+            <p id="profile-name" class="profile-name">Vardenis Pavardenis</p>
+            <p id="profile-mail" class="profile-mail">demo@augintimus.lt</p>
           </div>
         </div>
 
+        <div id="profile-chips" class="chips" aria-label="Mano anketos atsakymai"></div>
+
         <ul class="rows">
-          <li class="row" aria-disabled="true"><span>Mano anketa</span><span class="chip">netrukus</span></li>
+          <li><a class="row row-link" href="#/anketa"><span>Keisti anketą</span><span class="chev" aria-hidden="true">›</span></a></li>
           <li class="row" aria-disabled="true"><span>Pranešimai</span><span class="chip">netrukus</span></li>
           <li class="row" aria-disabled="true"><span>Apie Augintimus</span><span class="chip">netrukus</span></li>
         </ul>
 
         <button id="btn-logout" class="btn btn-plum" type="button">Atsijungti</button>
+        <button id="btn-reset" class="link-btn" type="button">Išvalyti demo duomenis</button>
         <p class="demo-note">Demonstracinė versija. Duomenys išgalvoti.</p>
       </div>
     </section>
@@ -113,7 +136,7 @@
     <!-- ============ BOTTOM TAB BAR ============ -->
     <nav id="tabbar" class="tabbar" aria-label="Pagrindinė navigacija" hidden>
       <a class="tab" href="#/gyvunai" data-tab="gyvunai">
-        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 13.2c-2.6 0-5.2 2.4-5.2 4.8 0 1.6 1.2 2.6 2.7 2.6 1 0 1.7-.4 2.5-.4s1.5.4 2.5.4c1.5 0 2.7-1 2.7-2.6 0-2.4-2.6-4.8-5.2-4.8zM5.6 11.6c1.1 0 2-1.1 2-2.5S6.7 6.600 5.600 6.600 3.600 7.700 3.600 9.100s.9 2.500 2 2.500zm4.300-2.600c1.200 0 2.100-1.300 2.100-2.900S11.100 3.200 9.900 3.200 7.800 4.500 7.800 6.100s.9 2.900 2.100 2.900zm4.200 0c1.200 0 2.100-1.300 2.100-2.900s-.9-2.900-2.100-2.900-2.100 1.300-2.100 2.900.9 2.900 2.100 2.900zm4.300 2.600c1.100 0 2-1.100 2-2.500s-.9-2.500-2-2.500-2 1.100-2 2.500.9 2.500 2 2.500z"/></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 13.2c-2.6 0-5.2 2.4-5.2 4.8 0 1.6 1.2 2.6 2.7 2.6 1 0 1.7-.4 2.5-.4s1.5.4 2.5.4c1.5 0 2.7-1 2.7-2.6 0-2.4-2.6-4.8-5.2-4.8zM5.6 11.6c1.1 0 2-1.1 2-2.5S6.7 6.6 5.6 6.6 3.6 7.7 3.6 9.1s.9 2.5 2 2.5zm4.3-2.6c1.2 0 2.1-1.3 2.1-2.9S11.1 3.2 9.9 3.2 7.8 4.5 7.8 6.1s.9 2.9 2.1 2.9zm4.2 0c1.2 0 2.1-1.3 2.1-2.9s-.9-2.9-2.1-2.9-2.1 1.3-2.1 2.9.9 2.9 2.1 2.9zm4.3 2.6c1.1 0 2-1.1 2-2.5s-.9-2.5-2-2.5-2 1.1-2 2.5.9 2.5 2 2.5z"/></svg>
         <span>Gyvūnai</span>
       </a>
       <a class="tab" href="#/sutapimai" data-tab="sutapimai">
@@ -121,7 +144,7 @@
         <span>Sutapimai</span>
       </a>
       <a class="tab" href="#/profilis" data-tab="profilis">
-        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.700 2.400 12 2.400 7.200 4.500 7.200 7.200 9.300 12 12 12zm0 2.400c-3.200 0-9.600 1.600-9.600 4.800v2.400h19.200v-2.400c0-3.200-6.400-4.800-9.600-4.800z"/></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
         <span>Profilis</span>
       </a>
     </nav>
@@ -130,5 +153,6 @@
 </div>
 
 <script src="js/app.js"></script>
+<script src="js/onboarding.js"></script>
 </body>
 </html>
