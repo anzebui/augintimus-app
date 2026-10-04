@@ -7,6 +7,7 @@
   <title>Augintimus</title>
   <link rel="icon" href="img/logo.png">
   <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/discover.css">
 </head>
 <body>
 
@@ -74,17 +75,67 @@
       </footer>
     </section>
 
-    <!-- ============ 3. GYVŪNAI (cards) ============ -->
-    <section id="screen-gyvunai" class="screen tab-screen" hidden>
+    <!-- ============ 3. GYVŪNAI (swipe cards) ============
+         Cards are built by js/discover.js from js/animals.js -->
+    <section id="screen-gyvunai" class="screen tab-screen discover" hidden>
       <header class="topbar">
         <img src="img/logo.png" alt="" width="34" height="34">
         <span class="brand">Augintimus</span>
       </header>
-      <div class="content">
-        <div class="empty">
+
+      <div class="disc-body">
+        <div id="a-deck" class="a-deck"></div>
+
+        <div id="a-empty" class="empty a-empty" hidden>
           <div class="empty-art" aria-hidden="true">🐾</div>
-          <h2>Kortelės jau netrukus</h2>
-          <p>Čia matysi gyvūnus, kurie ieško namų. Brauk į dešinę, jei patinka!</p>
+          <h2>Šiandienai tiek!</h2>
+          <p>Peržiūrėjai visus gyvūnus. Netrukus atsiras naujų.</p>
+          <button id="a-restart" class="btn btn-plum" type="button">Peržiūrėti iš naujo</button>
+        </div>
+
+        <p id="a-hint" class="a-hint">Brauk į dešinę, jei patinka. Į kairę, jei ne.</p>
+
+        <div id="a-actions" class="a-actions">
+          <button id="a-undo" class="a-btn a-small" type="button" aria-label="Grąžinti paskutinį pasirinkimą" disabled>
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 7L4 12l5 5M4 12h10a6 6 0 010 12" transform="translate(0 -3)" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button id="a-no" class="a-btn a-big a-no" type="button" aria-label="Ne">
+            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/></svg>
+          </button>
+          <button id="a-yes" class="a-btn a-big a-yes" type="button" aria-label="Patinka">
+            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Details sheet: opens when you tap a card -->
+      <div id="a-sheet" class="sheet" role="dialog" aria-modal="true" aria-label="Gyvūno informacija" hidden>
+        <div class="sheet-scroll" id="sheet-scroll">
+          <div class="gallery-wrap">
+            <div id="sheet-gallery" class="gallery"></div>
+            <div id="sheet-dots" class="dots" aria-hidden="true"></div>
+            <button id="sheet-close" class="sheet-close" type="button" aria-label="Uždaryti">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div class="sheet-text">
+            <h2 id="sheet-name" class="sheet-name"></h2>
+            <p id="sheet-sub" class="sheet-sub"></p>
+            <div id="sheet-tags" class="chips"></div>
+            <p id="sheet-desc" class="sheet-desc"></p>
+            <div class="sheet-shelter">
+              <span class="sheet-shelter-label">Prieglauda</span>
+              <span id="sheet-shelter"></span>
+            </div>
+          </div>
+        </div>
+        <div class="sheet-actions">
+          <button id="sheet-no" class="a-btn a-big a-no" type="button" aria-label="Ne">
+            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/></svg>
+          </button>
+          <button id="sheet-yes" class="a-btn a-big a-yes" type="button" aria-label="Patinka">
+            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
         </div>
       </div>
     </section>
@@ -96,7 +147,8 @@
         <span class="brand">Sutapimai</span>
       </header>
       <div class="content">
-        <div class="empty">
+        <ul id="likes-list" class="likes" hidden></ul>
+        <div id="likes-empty" class="empty">
           <div class="empty-art" aria-hidden="true">💚</div>
           <h2>Dar nėra sutapimų</h2>
           <p>Kai prieglauda patvirtins tavo anketą, čia atsiras jos kontaktai.</p>
@@ -154,5 +206,7 @@
 
 <script src="js/app.js"></script>
 <script src="js/onboarding.js"></script>
+<script src="js/animals.js"></script>
+<script src="js/discover.js"></script>
 </body>
 </html>

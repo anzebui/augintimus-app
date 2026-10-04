@@ -29,6 +29,7 @@
      If the browser blocks storage, we remember them in memory instead. */
   var KEY_LOGIN = 'augintimus_demo_login';
   var KEY_PROFILE = 'augintimus_demo_profile';
+  var KEY_SWIPES = 'augintimus_demo_swipes';
   var memory = {};
 
   function read(key) {
@@ -56,12 +57,21 @@
   }
   function saveProfile(profile) { write(KEY_PROFILE, JSON.stringify(profile)); }
 
+  // Swipe history: [{ id: 'rudis', v: 'like' | 'pass' }, ...]
+  function getSwipes() {
+    try { var list = JSON.parse(read(KEY_SWIPES) || '[]'); return Array.isArray(list) ? list : []; }
+    catch (e) { return []; }
+  }
+  function saveSwipes(list) { write(KEY_SWIPES, JSON.stringify(list)); }
+
   /* ---------- Shared object, so onboarding.js can talk to this file ---------- */
   var App = window.App = {
     onShow: {},                       // onboarding.js registers App.onShow.anketa
     user: { name: 'Vardenis Pavardenis', email: 'demo@augintimus.lt' },   // fake Google account
     getProfile: getProfile,
     saveProfile: saveProfile,
+    getSwipes: getSwipes,
+    saveSwipes: saveSwipes,
     go: go,
     describeProfile: function () { return []; }   // replaced by onboarding.js
   };
@@ -148,6 +158,7 @@
     // Demo helper: forget the login AND the answers, so you can test the first-time flow again
     setSignedIn(false);
     write(KEY_PROFILE, null);
+    write(KEY_SWIPES, null);
     lastName = null;
     go('welcome');
   });
