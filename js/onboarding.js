@@ -13,12 +13,12 @@
   var STEPS = [
     {
       id: 'purpose', type: 'cards', multi: true,
-      title: 'Ko ieškai?',
+      title: 'Esu čia, nes...',
       hint: 'Gali pasirinkti kelis variantus',
       options: [
-        { value: 'look',   label: 'Tik apsidairau',  img: 'purpose-look.png',   emoji: '👀' },
-        { value: 'foster', label: 'Laikinai globoti', img: 'purpose-foster.png', emoji: '🏡' },
-        { value: 'adopt',  label: 'Įvaikinti',        img: 'purpose-adopt.png',  emoji: '💞' }
+        { value: 'look',   label: 'Kol kas tik dairausi', chip: 'Dairosi', img: 'purpose-look.png',   emoji: '👀' },
+        { value: 'foster', label: 'Galiu suteikti laikiną globą', chip: 'Laikinai globoti', img: 'purpose-foster.png', emoji: '🏡' },
+        { value: 'adopt',  label: 'Ieškau augintinio įsivaikinimui', chip: 'Įsivaikinti', img: 'purpose-adopt.png',  emoji: '💞' }
       ]
     },
     {
@@ -559,7 +559,7 @@
     });
     (p.purpose || []).forEach(function (v) {
       var o = findOption('purpose', v);
-      if (o) out.push(o.emoji + ' ' + o.label);
+      if (o) out.push(o.emoji + ' ' + (o.chip || o.label));
     });
     if (p.kids) out.push(p.kids === 'yes' ? '👶 Namuose yra vaikų' : '👶 Vaikų nėra');
     if (p.pets) out.push(p.pets === 'yes' ? '🐾 Turi augintinių' : '🐾 Augintinių neturi');
