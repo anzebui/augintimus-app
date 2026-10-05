@@ -147,11 +147,54 @@
         <span class="brand">Sutapimai</span>
       </header>
       <div class="content">
-        <ul id="likes-list" class="likes" hidden></ul>
+        <section id="matches-block" hidden>
+          <h2 class="list-title">Sutapimai 🎉</h2>
+          <ul id="matches-list" class="likes"></ul>
+        </section>
+        <section id="pending-block" hidden>
+          <h2 class="list-title">Laukiama prieglaudos atsakymo</h2>
+          <ul id="likes-list" class="likes"></ul>
+        </section>
         <div id="likes-empty" class="empty">
           <div class="empty-art" aria-hidden="true">💚</div>
           <h2>Dar nėra sutapimų</h2>
-          <p>Kai prieglauda patvirtins tavo anketą, čia atsiras jos kontaktai.</p>
+          <p>Paspausk širdelę prie gyvūno, kuris patinka. Kai prieglauda patvirtins tavo anketą, čia atsiras jos kontaktai.</p>
+        </div>
+      </div>
+
+      <!-- Celebration shown when a shelter says yes -->
+      <div id="m-party" class="party" role="dialog" aria-modal="true" aria-label="Sutapimas" hidden>
+        <div id="m-confetti" class="confetti" aria-hidden="true"></div>
+        <div class="party-card">
+          <h2 class="party-title">Sutapimas!</h2>
+          <div id="m-party-pic" class="party-pic"></div>
+          <p id="m-party-text" class="party-text"></p>
+          <button id="m-party-open" class="btn btn-tangerine" type="button">Pamatyti kontaktus</button>
+          <button id="m-party-later" class="link-btn" type="button">Vėliau</button>
+        </div>
+      </div>
+
+      <!-- Shelter contacts -->
+      <div id="m-sheet" class="sheet" role="dialog" aria-modal="true" aria-label="Prieglaudos kontaktai" hidden>
+        <div class="sheet-scroll">
+          <div class="gallery-wrap">
+            <div id="m-pic" class="m-pic"></div>
+            <button id="m-close" class="sheet-close" type="button" aria-label="Uždaryti">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div class="sheet-text">
+            <h2 id="m-name" class="sheet-name"></h2>
+            <p id="m-lead" class="sheet-sub"></p>
+            <ul class="rows m-rows">
+              <li><a id="m-phone" class="row row-link" href="#"><span>📞 <b id="m-phone-t"></b></span><span class="chev" aria-hidden="true">›</span></a></li>
+              <li><a id="m-email" class="row row-link" href="#"><span>✉️ <b id="m-email-t"></b></span><span class="chev" aria-hidden="true">›</span></a></li>
+              <li><a id="m-addr" class="row row-link" href="#" target="_blank" rel="noopener"><span>📍 <b id="m-addr-t"></b></span><span class="chev" aria-hidden="true">›</span></a></li>
+            </ul>
+            <h3 class="m-sub">Darbo laikas</h3>
+            <dl id="m-hours" class="hours"></dl>
+            <p class="m-tip">Susisiek ir paminėk gyvūno vardą, tada prieglauda žinos, kuo domiesi.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -194,6 +237,7 @@
       <a class="tab" href="#/sutapimai" data-tab="sutapimai">
         <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
         <span>Sutapimai</span>
+        <span id="tab-badge" class="tab-badge" hidden></span>
       </a>
       <a class="tab" href="#/profilis" data-tab="profilis">
         <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>

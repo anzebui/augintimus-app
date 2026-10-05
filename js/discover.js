@@ -140,8 +140,10 @@
     if (!canUndo || busy) return;
     var swipes = App.getSwipes();
     if (!swipes.length) return;
-    swipes.pop();
+    var undone = swipes.pop();
     App.saveSwipes(swipes);
+    var m = App.getMatches();
+    if (undone && m[undone.id]) { delete m[undone.id]; App.saveMatches(m); }
     canUndo = false;
     render();
     var card = frontCard();
@@ -248,6 +250,7 @@
 
   $('a-restart').addEventListener('click', function () {
     App.saveSwipes([]);     // demo only: start from the beginning
+    App.saveMatches({});
     canUndo = false;
     render();
   });
@@ -260,30 +263,159 @@
     if (e.key === 'ArrowLeft') decide('pass');
   });
 
-  /* ---------- "Sutapimai" tab: animals you liked ---------- */
+  /* ---------- "Sutapimai" tab ---------- */
+  var party = $('m-party');
+  var msheet = $('m-sheet');
+  var partyAnimal = null;
+
+  function likeRow(animal, status) {
+    var li = el('li', 'like-row');
+    li.appendChild(buildMedia(animal, 'like-thumb', 0));
+    var text = el('div', 'like-text');
+    text.appendChild(el('p', 'like-name', animal.name));
+    text.appendChild(el('p', 'like-sub', animal.shelter.replace(' (demo)', '')));
+    li.appendChild(text);
+    li.appendChild(el('span', status === 'match' ? 'chip chip-yes' : 'chip', status === 'match' ? 'Patvirtinta' : 'Laukiama'));
+    return li;
+  }
+
   function renderLikes() {
-    var list = $('likes-list');
-    list.innerHTML = '';
+    var matches = App.getMatches();
     var liked = App.getSwipes().filter(function (s) { return s.v === 'like'; }).reverse();
-    list.hidden = liked.length === 0;
-    $('likes-empty').hidden = liked.length > 0;
+    var mList = $('matches-list');
+    var pList = $('likes-list');
+    mList.innerHTML = '';
+    pList.innerHTML = '';
+    var mCount = 0, pCount = 0;
 
     liked.forEach(function (s) {
       var animal = byId(s.id);
       if (!animal) return;
-      var li = el('li', 'like-row');
-      var thumb = buildMedia(animal, 'like-thumb', 0);
-      li.appendChild(thumb);
-      var text = el('div', 'like-text');
-      text.appendChild(el('p', 'like-name', animal.name));
-      text.appendChild(el('p', 'like-sub', animal.shelter));
-      li.appendChild(text);
-      li.appendChild(el('span', 'chip', 'Laukiama atsakymo'));
-      list.appendChild(li);
+      if (matches[s.id]) {
+        var row = likeRow(animal, 'match');
+        row.classList.add('is-tappable');
+        row.tabIndex = 0;
+        row.setAttribute('role', 'button');
+        row.addEventListener('click', function () { openContacts(animal); });
+        row.addEventListener('keydown', function (e) { if (e.key === 'Enter') openContacts(animal); });
+        mList.appendChild(row);
+        mCount++;
+      } else {
+        var li = likeRow(animal, 'pending');
+        // Demo only: pretend the shelter answered
+        var demo = el('button', 'demo-approve', 'Demo: prieglauda patvirtino');
+        demo.type = 'button';
+        demo.addEventListener('click', function () { approve(animal); });
+        li.appendChild(demo);
+        pList.appendChild(li);
+        pCount++;
+      }
     });
+
+    $('matches-block').hidden = mCount === 0;
+    $('pending-block').hidden = pCount === 0;
+    $('likes-empty').hidden = mCount + pCount > 0;
+    updateBadge();
   }
 
+  // Red dot on the tab for matches the person has not opened yet
+  function updateBadge() {
+    var m = App.getMatches();
+    var unseen = Object.keys(m).filter(function (id) { return !m[id].seen; }).length;
+    var badge = $('tab-badge');
+    badge.hidden = unseen === 0;
+    badge.textContent = unseen;
+  }
+
+  function approve(animal) {
+    var m = App.getMatches();
+    m[animal.id] = { seen: false };
+    App.saveMatches(m);
+    canUndo = false;
+    renderLikes();
+    showParty(animal);
+  }
+
+  /* celebration */
+  function showParty(animal) {
+    partyAnimal = animal;
+    var m = App.getMatches();
+    if (m[animal.id]) { m[animal.id].seen = true; App.saveMatches(m); }
+    updateBadge();
+
+    var pic = $('m-party-pic');
+    pic.innerHTML = '';
+    pic.appendChild(buildMedia(animal, 'party-media', 0));
+    $('m-party-text').textContent = animal.shelter.replace(' (demo)', '') + ' patvirtino tavo anketą. ' + animal.name + ' nekantrauja susipažinti!';
+
+    var box = $('m-confetti');
+    box.innerHTML = '';
+    var colors = ['#FF6B1A', '#FFD3E6', '#FFE27A', '#1FB37A', '#ECE6FF', '#F0475B'];
+    for (var i = 0; i < 38; i++) {
+      var bit = el('span', 'bit');
+      bit.style.left = Math.round(Math.random() * 100) + '%';
+      bit.style.background = colors[i % colors.length];
+      bit.style.animationDelay = (Math.random() * 0.9).toFixed(2) + 's';
+      bit.style.animationDuration = (2.2 + Math.random() * 1.6).toFixed(2) + 's';
+      bit.style.setProperty('--drift', Math.round(Math.random() * 120 - 60) + 'px');
+      bit.style.setProperty('--spin', Math.round(Math.random() * 720 - 360) + 'deg');
+      box.appendChild(bit);
+    }
+    party.hidden = false;
+    $('m-party-open').focus();
+  }
+
+  function closeParty() { party.hidden = true; partyAnimal = null; }
+
+  $('m-party-open').addEventListener('click', function () {
+    var a = partyAnimal;
+    closeParty();
+    if (a) openContacts(a);
+  });
+  $('m-party-later').addEventListener('click', closeParty);
+
+  /* contacts sheet */
+  function openContacts(animal) {
+    var info = (window.SHELTERS || {})[animal.shelter] || { phone: '', email: '', address: animal.city };
+    var pic = $('m-pic');
+    pic.innerHTML = '';
+    pic.appendChild(buildMedia(animal, 'slide', 0));
+
+    $('m-name').textContent = animal.name;
+    $('m-lead').textContent = animal.shelter.replace(' (demo)', '');
+
+    $('m-phone').href = 'tel:' + info.phone.replace(/\s/g, '');
+    $('m-phone-t').textContent = info.phone;
+    $('m-email').href = 'mailto:' + info.email;
+    $('m-email-t').textContent = info.email;
+    $('m-addr').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(info.address);
+    $('m-addr-t').textContent = info.address;
+
+    var hours = $('m-hours');
+    hours.innerHTML = '';
+    (window.SHELTER_HOURS || []).forEach(function (h) {
+      var row = el('div', 'hours-row');
+      row.appendChild(el('dt', '', h[0]));
+      row.appendChild(el('dd', '', h[1]));
+      hours.appendChild(row);
+    });
+
+    msheet.hidden = false;
+    msheet.querySelector('.sheet-scroll').scrollTop = 0;
+    $('m-close').focus();
+  }
+  $('m-close').addEventListener('click', function () { msheet.hidden = true; });
+
   /* ---------- Hook into the app ---------- */
-  App.onShow.gyvunai = function () { closeSheet(); render(); };
-  App.onShow.sutapimai = renderLikes;
+  App.onShow.gyvunai = function () { closeSheet(); render(); updateBadge(); };
+  App.onShow.sutapimai = function () {
+    party.hidden = true;
+    msheet.hidden = true;
+    renderLikes();
+    // A match the person has not seen yet gets the celebration
+    var m = App.getMatches();
+    var firstNew = Object.keys(m).filter(function (id) { return !m[id].seen; })[0];
+    if (firstNew && byId(firstNew)) showParty(byId(firstNew));
+  };
+  updateBadge();
 })();

@@ -217,6 +217,114 @@
 .like-name { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; line-height: 1.1; }
 .like-sub { font-size: .82rem; color: var(--plum-soft); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* sections on the Sutapimai tab */
+.list-title { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; margin-bottom: 10px; }
+#matches-block[hidden], #pending-block[hidden] { display: none; }
+.content > section + section { margin-top: 4px; }
+.like-row { flex-wrap: wrap; }
+.like-row.is-tappable { cursor: pointer; }
+.like-row.is-tappable:active { background: var(--bubblegum); }
+.chip-yes { background: #C9F2DF; }
+.demo-approve {
+  flex-basis: 100%;
+  padding: 8px 10px;
+  border: 2px dashed rgba(42, 20, 56, .4);
+  border-radius: 12px;
+  background: var(--lilac);
+  color: var(--plum);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.demo-approve:active { background: var(--bubblegum); }
+
+/* red dot on the tab */
+.tab { position: relative; }
+.tab-badge {
+  position: absolute;
+  top: 3px;
+  left: calc(50% + 8px);
+  min-width: 18px; height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--no);
+  color: var(--white);
+  border: 2px solid var(--plum);
+  font-size: .68rem;
+  font-weight: 800;
+  line-height: 14px;
+  text-align: center;
+}
+.tab-badge[hidden] { display: none; }
+
+/* ----- match celebration ----- */
+.party {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--bubblegum);
+  overflow: hidden;
+  animation: sheet-up .3s ease-out;
+}
+.party[hidden] { display: none; }
+.party-card { position: relative; z-index: 1; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.party-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--plum);
+  animation: party-pop .6s cubic-bezier(.2, 1.4, .4, 1);
+}
+@keyframes party-pop { from { transform: scale(.3) rotate(-8deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.party-pic {
+  width: 190px; height: 190px;
+  border: var(--border);
+  border-radius: 50%;
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  background: var(--white);
+  animation: party-pop .7s .1s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+.party-media { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
+.party-media .a-emoji { font-size: 5.5rem; margin: 0; }
+.party-text { max-width: 19em; font-weight: 600; line-height: 1.4; color: var(--plum); }
+.party .btn { margin-top: 6px; }
+
+.confetti { position: absolute; inset: 0; pointer-events: none; }
+.confetti .bit {
+  position: absolute;
+  top: -16px;
+  width: 10px; height: 16px;
+  border-radius: 3px;
+  opacity: 0;
+  animation: confetti-fall 3s linear infinite;
+}
+@keyframes confetti-fall {
+  0%   { transform: translate(0, 0) rotate(0); opacity: 1; }
+  100% { transform: translate(var(--drift), 110vh) rotate(var(--spin)); opacity: 1; }
+}
+
+/* ----- contacts sheet ----- */
+.m-pic { border-bottom: var(--border); }
+.m-rows { margin: 8px 0 4px; }
+.m-rows .row { padding-block: 14px; }
+.m-rows b { font-weight: 700; word-break: break-word; }
+.m-sub { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; margin: 18px 0 8px; }
+.hours { display: flex; flex-direction: column; gap: 2px; }
+.hours-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 2px solid rgba(42, 20, 56, .1); font-weight: 600; }
+.hours-row dd { color: var(--plum-soft); white-space: nowrap; }
+.m-tip { margin-top: 16px; padding: 12px 14px; border-radius: 16px; background: var(--lilac); font-weight: 600; line-height: 1.4; }
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   .a-card, .sheet, .a-btn { transition: none !important; animation: none !important; }
 }
+
+/* the Sutapimai list scrolls inside the screen so the sheets can cover it */
+#screen-sutapimai { overflow: hidden; }
+#screen-sutapimai .content { overflow-y: auto; min-height: 0; }

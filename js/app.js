@@ -30,6 +30,7 @@
   var KEY_LOGIN = 'augintimus_demo_login';
   var KEY_PROFILE = 'augintimus_demo_profile';
   var KEY_SWIPES = 'augintimus_demo_swipes';
+  var KEY_MATCHES = 'augintimus_demo_matches';
   var memory = {};
 
   function read(key) {
@@ -64,6 +65,13 @@
   }
   function saveSwipes(list) { write(KEY_SWIPES, JSON.stringify(list)); }
 
+  // Matches = likes the shelter approved: { rudis: { seen: false }, ... }
+  function getMatches() {
+    try { var m = JSON.parse(read(KEY_MATCHES) || '{}'); return m && typeof m === 'object' ? m : {}; }
+    catch (e) { return {}; }
+  }
+  function saveMatches(m) { write(KEY_MATCHES, JSON.stringify(m)); }
+
   /* ---------- Shared object, so onboarding.js can talk to this file ---------- */
   var App = window.App = {
     onShow: {},                       // onboarding.js registers App.onShow.anketa
@@ -72,6 +80,8 @@
     saveProfile: saveProfile,
     getSwipes: getSwipes,
     saveSwipes: saveSwipes,
+    getMatches: getMatches,
+    saveMatches: saveMatches,
     go: go,
     describeProfile: function () { return []; }   // replaced by onboarding.js
   };
@@ -159,6 +169,7 @@
     setSignedIn(false);
     write(KEY_PROFILE, null);
     write(KEY_SWIPES, null);
+    write(KEY_MATCHES, null);
     lastName = null;
     go('welcome');
   });

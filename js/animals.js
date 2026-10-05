@@ -73,3 +73,23 @@ window.ANIMALS = [
     photos: []
   }
 ];
+
+/* =====================================================
+   FAKE SHELTER CONTACTS (shown only after a match)
+   Keys must match the "shelter" text of the animals above.
+   ===================================================== */
+window.SHELTERS = {
+  'Vilniaus prieglauda (demo)': { phone: '+370 600 00001', email: 'info@vilnius-prieglauda.example', address: 'Demo g. 1, Vilnius' },
+  'Kauno prieglauda (demo)':    { phone: '+370 600 00002', email: 'info@kaunas-prieglauda.example',  address: 'Demo g. 2, Kaunas' },
+  'Klaipėdos prieglauda (demo)':{ phone: '+370 600 00003', email: 'info@klaipeda-prieglauda.example',address: 'Demo g. 3, Klaipėda' },
+  'Šiaulių prieglauda (demo)':  { phone: '+370 600 00004', email: 'info@siauliai-prieglauda.example',address: 'Demo g. 4, Šiauliai' },
+  'Panevėžio prieglauda (demo)':{ phone: '+370 600 00005', email: 'info@panevezys-prieglauda.example',address: 'Demo g. 5, Panevėžys' },
+  'Alytaus prieglauda (demo)':  { phone: '+370 600 00006', email: 'info@alytus-prieglauda.example',  address: 'Demo g. 6, Alytus' }
+};
+
+// Working hours (same for every demo shelter)
+window.SHELTER_HOURS = [
+  ['Pirmadienis – penktadienis', '10:00 – 17:00'],
+  ['Šeštadienis', '10:00 – 15:00'],
+  ['Sekmadienis', 'Nedirbame']
+];
