@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#FFD3E6">
   <title>Augintimus</title>
-  <link rel="icon" href="img/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Augintimus">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/discover.css">
 </head>
@@ -151,6 +157,10 @@
           <h2 class="list-title">Sutapimai 🎉</h2>
           <ul id="matches-list" class="likes"></ul>
         </section>
+        <section id="rejected-block" hidden>
+          <h2 class="list-title">Šį kartą nepavyko</h2>
+          <ul id="rejected-list" class="likes"></ul>
+        </section>
         <section id="pending-block" hidden>
           <h2 class="list-title">Laukiama prieglaudos atsakymo</h2>
           <ul id="likes-list" class="likes"></ul>
@@ -171,6 +181,17 @@
           <p id="m-party-text" class="party-text"></p>
           <button id="m-party-open" class="btn btn-tangerine" type="button">Pamatyti kontaktus</button>
           <button id="m-party-later" class="link-btn" type="button">Vėliau</button>
+        </div>
+      </div>
+
+      <!-- Gentle message when a shelter says no -->
+      <div id="m-sorry" class="party sorry" role="dialog" aria-modal="true" aria-label="Prieglaudos atsakymas" hidden>
+        <div class="party-card">
+          <div id="m-sorry-pic" class="party-pic sorry-pic"></div>
+          <h2 id="m-sorry-title" class="sorry-title"></h2>
+          <p id="m-sorry-text" class="party-text"></p>
+          <button id="m-sorry-more" class="btn btn-tangerine" type="button">Rasti kitų gyvūnų</button>
+          <button id="m-sorry-close" class="link-btn" type="button">Uždaryti</button>
         </div>
       </div>
 
@@ -252,5 +273,11 @@
 <script src="js/onboarding.js"></script>
 <script src="js/animals.js"></script>
 <script src="js/discover.js"></script>
+<script>
+  // Makes the app installable and usable offline
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  }
+</script>
 </body>
 </html>

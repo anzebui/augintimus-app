@@ -275,7 +275,8 @@
     text.appendChild(el('p', 'like-name', animal.name));
     text.appendChild(el('p', 'like-sub', animal.shelter.replace(' (demo)', '')));
     li.appendChild(text);
-    li.appendChild(el('span', status === 'match' ? 'chip chip-yes' : 'chip', status === 'match' ? 'Patvirtinta' : 'Laukiama'));
+    var label = { match: 'Patvirtinta', rejected: 'Nepavyko', pending: 'Laukiama' }[status];
+    li.appendChild(el('span', status === 'match' ? 'chip chip-yes' : status === 'rejected' ? 'chip chip-no' : 'chip', label));
     return li;
   }
 
@@ -284,14 +285,21 @@
     var liked = App.getSwipes().filter(function (s) { return s.v === 'like'; }).reverse();
     var mList = $('matches-list');
     var pList = $('likes-list');
+    var rList = $('rejected-list');
     mList.innerHTML = '';
     pList.innerHTML = '';
-    var mCount = 0, pCount = 0;
+    rList.innerHTML = '';
+    var mCount = 0, pCount = 0, rCount = 0;
 
     liked.forEach(function (s) {
       var animal = byId(s.id);
       if (!animal) return;
-      if (matches[s.id]) {
+      if (matches[s.id] && matches[s.id].status === 'rejected') {
+        var rrow = likeRow(animal, 'rejected');
+        rrow.classList.add('is-dim');
+        rList.appendChild(rrow);
+        rCount++;
+      } else if (matches[s.id]) {
         var row = likeRow(animal, 'match');
         row.classList.add('is-tappable');
         row.tabIndex = 0;
@@ -303,10 +311,16 @@
       } else {
         var li = likeRow(animal, 'pending');
         // Demo only: pretend the shelter answered
-        var demo = el('button', 'demo-approve', 'Demo: prieglauda patvirtino');
+        var demoRow = el('div', 'demo-row');
+        var demo = el('button', 'demo-approve', 'Demo: patvirtino');
         demo.type = 'button';
-        demo.addEventListener('click', function () { approve(animal); });
-        li.appendChild(demo);
+        demo.addEventListener('click', function () { answer(animal, 'approved'); });
+        var demoNo = el('button', 'demo-approve', 'Demo: atmetė');
+        demoNo.type = 'button';
+        demoNo.addEventListener('click', function () { answer(animal, 'rejected'); });
+        demoRow.appendChild(demo);
+        demoRow.appendChild(demoNo);
+        li.appendChild(demoRow);
         pList.appendChild(li);
         pCount++;
       }
@@ -314,7 +328,8 @@
 
     $('matches-block').hidden = mCount === 0;
     $('pending-block').hidden = pCount === 0;
-    $('likes-empty').hidden = mCount + pCount > 0;
+    $('rejected-block').hidden = rCount === 0;
+    $('likes-empty').hidden = mCount + pCount + rCount > 0;
     updateBadge();
   }
 
@@ -327,14 +342,38 @@
     badge.textContent = unseen;
   }
 
-  function approve(animal) {
+  function answer(animal, status) {
     var m = App.getMatches();
-    m[animal.id] = { seen: false };
+    m[animal.id] = { status: status, seen: false };
     App.saveMatches(m);
     canUndo = false;
     renderLikes();
-    showParty(animal);
+    showAnswer(animal);
   }
+
+  // Shows the right screen for the shelter's answer
+  function showAnswer(animal) {
+    var m = App.getMatches()[animal.id];
+    if (m && m.status === 'rejected') showSorry(animal);
+    else showParty(animal);
+  }
+
+  /* gentle "no" */
+  var sorry = $('m-sorry');
+  function showSorry(animal) {
+    var m = App.getMatches();
+    if (m[animal.id]) { m[animal.id].seen = true; App.saveMatches(m); }
+    updateBadge();
+    var pic = $('m-sorry-pic');
+    pic.innerHTML = '';
+    pic.appendChild(buildMedia(animal, 'party-media', 0));
+    $('m-sorry-title').textContent = 'Šį kartą nepavyko';
+    $('m-sorry-text').textContent = animal.shelter.replace(' (demo)', '') + ' nusprendė, kad ' + animal.name + ' galbūt geriau tiks kitoje šeimoje. Tai nereiškia, kad tau kažko trūksta. Daug kitų gyvūnų irgi laukia tavęs.';
+    sorry.hidden = false;
+    $('m-sorry-more').focus();
+  }
+  $('m-sorry-close').addEventListener('click', function () { sorry.hidden = true; });
+  $('m-sorry-more').addEventListener('click', function () { sorry.hidden = true; App.go('gyvunai'); });
 
   /* celebration */
   function showParty(animal) {
@@ -410,12 +449,13 @@
   App.onShow.gyvunai = function () { closeSheet(); render(); updateBadge(); };
   App.onShow.sutapimai = function () {
     party.hidden = true;
+    sorry.hidden = true;
     msheet.hidden = true;
     renderLikes();
     // A match the person has not seen yet gets the celebration
     var m = App.getMatches();
     var firstNew = Object.keys(m).filter(function (id) { return !m[id].seen; })[0];
-    if (firstNew && byId(firstNew)) showParty(byId(firstNew));
+    if (firstNew && byId(firstNew)) showAnswer(byId(firstNew));
   };
   updateBadge();
 })();

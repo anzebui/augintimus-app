@@ -225,8 +225,9 @@
 .like-row.is-tappable { cursor: pointer; }
 .like-row.is-tappable:active { background: var(--bubblegum); }
 .chip-yes { background: #C9F2DF; }
+.demo-row { flex-basis: 100%; display: flex; gap: 8px; }
 .demo-approve {
-  flex-basis: 100%;
+  flex: 1;
   padding: 8px 10px;
   border: 2px dashed rgba(42, 20, 56, .4);
   border-radius: 12px;
@@ -328,3 +329,11 @@
 /* the Sutapimai list scrolls inside the screen so the sheets can cover it */
 #screen-sutapimai { overflow: hidden; }
 #screen-sutapimai .content { overflow-y: auto; min-height: 0; }
+
+/* ----- when a shelter says no ----- */
+.sorry { background: var(--lilac); }
+.sorry-pic { filter: grayscale(.25); }
+.sorry-title { font-family: var(--font-display); font-weight: 800; font-size: 2rem; line-height: 1.1; color: var(--plum); }
+.chip-no { background: #FFD9DE; }
+.like-row.is-dim { opacity: .65; box-shadow: none; }
+#rejected-block[hidden] { display: none; }
